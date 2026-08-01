@@ -1,0 +1,18 @@
+[Unit]
+Description=tgsms - forward Telegram messages to webhook
+Documentation=https://github.com/kuosfls/tm
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/tgsms/tgsms run -c /etc/tgsms/config.yaml
+WorkingDirectory=/etc/tgsms
+Restart=on-failure
+RestartSec=10
+# 退出码 2 = 未登录/配置不完整, 反复重启没有意义
+RestartPreventExitStatus=2
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,40 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+
+      - name: Tidy modules
+        run: go mod tidy
+
+      - name: Build
+        run: |
+          set -e
+          for arch in amd64 arm64; do
+            mkdir -p "dist/$arch"
+            CGO_ENABLED=0 GOOS=linux GOARCH=$arch go build -trimpath \
+              -ldflags "-s -w -X main.version=${GITHUB_REF_NAME}" \
+              -o "dist/$arch/tgsms" .
+            cp scripts/tgsms.sh scripts/tgsms.service "dist/$arch/"
+            tar -czf "tgsms-linux-$arch.tar.gz" -C "dist/$arch" tgsms tgsms.sh tgsms.service
+          done
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tgsms-linux-*.tar.gz
+          generate_release_notes: true

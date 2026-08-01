@@ -1,0 +1,19 @@
+# tgsms 配置示例 (实际配置位于 /etc/tgsms/config.yaml)
+# api_id / api_hash 在 https://my.telegram.org -> API development tools 申请
+api_id: 0
+api_hash: ""
+# 手机号 (含国际区号, 如 +8613800138000), 留空则登录时交互输入
+phone: ""
+# 收到消息后 POST 的目标地址
+webhook_url: "https://example.com/hook"
+# 可选: 推送请求头 X-TGSMS-Secret 的值, 用于目标端校验来源
+webhook_secret: ""
+# 监听的会话 ID 列表: 用户为正数, 普通群为负数, 频道/超级群以 -100 开头
+# 可用 tgsms chats 查看最近会话的 ID
+chat_ids:
+  - 777000
+  - -1001234567890
+# 可选: socks5 代理 (支持 socks5://user:pass@host:port)
+proxy: ""
+# 是否也转发自己发出的消息
+include_outgoing: false

@@ -1,0 +1,9 @@
+# 编译产物
+/tgsms
+/tgsms.exe
+/dist/
+*.tar.gz
+
+# 本地运行产生的敏感文件
+config.yaml
+session.json
